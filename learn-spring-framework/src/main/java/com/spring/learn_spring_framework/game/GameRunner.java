@@ -1,10 +1,15 @@
 package com.spring.learn_spring_framework.game;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class GameRunner {
 	
 	// private MarioGame game;
 	// private SuperContraGame game2;
-	private GamingConsole game3;
+	@Autowired
+	private GamingConsole game;
 
 	
 	// public GameRunner(MarioGame game) {
@@ -16,7 +21,7 @@ public class GameRunner {
 	// }
 	
 	public GameRunner(GamingConsole game) {
-		this.game3 = game;
+		this.game = game;
 	}
 
 	// public void run() {
@@ -33,11 +38,11 @@ public class GameRunner {
 	// 	game2.right();
 	// }
 	
-	public void run3() {
-		game3.up();
-		game3.down();
-		game3.left();
-		game3.right();
+	public void run() {
+		game.up();
+		game.down();
+		game.left();
+		game.right();
 	}
 
 }
