@@ -1,6 +1,7 @@
 package com.rest.webservices.restful_web_services.user;
 
 import java.net.URI;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,18 @@ public class UserResource {
 	
 	@GetMapping(path = "/users/{id}")
 	public User retrieveUsersById(@PathVariable int id) {
-		return service.findOne(id);
+		User user = service.findOne(id);
+		
+		if (user == null) {
+			throw new UserNotFoundException("id:" + id);
+		}
+		
+		return user;
 	}
 	
 	@PostMapping(path = "/users")
 	public ResponseEntity<User> createUser(@RequestBody User user) {
+		
 		User userSavedUser = service.save(user);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -39,8 +47,7 @@ public class UserResource {
 				.buildAndExpand(userSavedUser.getId())
 				.toUri();
 		
-		return ResponseEntity.created(location).build();
-		
+		return ResponseEntity.created(location).build();	
 	}
 	
 }
