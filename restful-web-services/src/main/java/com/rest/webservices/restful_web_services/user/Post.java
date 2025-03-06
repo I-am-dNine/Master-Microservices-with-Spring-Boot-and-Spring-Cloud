@@ -21,6 +21,9 @@ public class Post {
 	@JsonIgnore
 	private User user;
 
+	protected Post() {
+    }
+
 	public Post(Integer id, String description, User user) {
 		super();
 		this.id = id;
