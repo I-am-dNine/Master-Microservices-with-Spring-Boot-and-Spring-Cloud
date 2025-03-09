@@ -24,19 +24,19 @@ import jakarta.validation.Valid;
 @RestController
 public class UserJpaResource {
 	
-	private UserRepository repository;
+	private UserRepository userRepository;
 	
 	private PostRepository postRepository;
 
 	
-	public UserJpaResource (UserRepository repository, PostRepository postRepository) {
-		this.repository = repository;
+	public UserJpaResource (UserRepository userRepository, PostRepository postRepository) {
+		this.userRepository = userRepository;
 		this.postRepository = postRepository;
 	}
 	
 	@GetMapping(path = "/jpa/users")
 	public List<User> retrieveAllUsers() {
-		return repository.findAll();
+		return userRepository.findAll();
 	}
 	
 	//http://localhost:8080/jpa/users
@@ -44,7 +44,7 @@ public class UserJpaResource {
 	//WebMvcLinkBuilder
 	@GetMapping(path = "/jpa/users/{id}")
 	public EntityModel<User> retrieveUsersById(@PathVariable int id) {
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userRepository.findById(id);
 		
 		if (user.isEmpty()) {
 			throw new UserNotFoundException("id:" + id);
@@ -60,13 +60,13 @@ public class UserJpaResource {
 	
 	@DeleteMapping(path = "/jpa/users/{id}")
 	public void deleteUsersById(@PathVariable int id) {
-		repository.deleteById(id);
+		userRepository.deleteById(id);
 	}
 	
 	@PostMapping(path = "/jpa/users")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
 		
-		User userSavedUser = repository.save(user);
+		User userSavedUser = userRepository.save(user);
 
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}")
@@ -78,7 +78,7 @@ public class UserJpaResource {
 	
 	@GetMapping(path = "jpa/users/{id}/posts")
 	public List<Post> reterivePostsByUserId(@PathVariable int id) {
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userRepository.findById(id);
 		
 		if (user.isEmpty()) {
 			throw new UserNotFoundException("id:" + id);
@@ -89,7 +89,7 @@ public class UserJpaResource {
 	
 	@PostMapping(path = "jpa/users/{id}/posts")
 	public ResponseEntity<Object> createPostsByUserId(@PathVariable int id, @Valid @RequestBody Post post) {
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userRepository.findById(id);
 		
 		if (user.isEmpty()) {
 			throw new UserNotFoundException("id:" + id);
